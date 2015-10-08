@@ -27,4 +27,9 @@ urlpatterns = [
         'collection.views.thing_detail',
         name='thing_detail'
     ),
+    url(
+        r'thing/(?P<slug>[-\w]+)/edit/$',
+        'collection.views.edit_thing',
+        name='edit_thing'
+    ),
 ]
