@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.template.defaultfilters import slugify
 
@@ -25,11 +27,17 @@ def thing_detail(request, slug):
     })
 
 
+@login_required
 def edit_thing(request, slug):
     """
     Edit thing
     """
     thing = Thing.objects.get(slug=slug)
+
+    # Make sure user own the thing
+    if thing.user != request.user:
+        raise Http404
+
     form_class = ThingForm
 
     if request.method == 'POST':
