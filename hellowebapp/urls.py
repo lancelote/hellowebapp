@@ -6,7 +6,7 @@ from django.contrib.auth.views import (
     password_reset_confirm,
     password_reset_complete
 )
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 from collection.backends import MyRegistrationView
 
@@ -72,6 +72,20 @@ urlpatterns = [
         include(admin.site.urls)
     ),
     url(
+        r'^browse/',
+        RedirectView.as_view(pattern_name='browse')
+    ),
+    url(
+        r'^browse/name/$',
+        'collection.views.browse_by_name',
+        name='browse'
+    ),
+    url(
+        r'^browse/name/(?P<initial>[-\w]+)/$',
+        'collection.views.browse_by_name',
+        name='browse_by_name'
+    ),
+    url(
         r'^contact/',
         TemplateView.as_view(template_name='layouts/contact.html'),
         name='contact'
@@ -82,8 +96,12 @@ urlpatterns = [
         name='thing_detail'
     ),
     url(
-        r'thing/(?P<slug>[-\w]+)/edit/$',
+        r'^thing/(?P<slug>[-\w]+)/edit/$',
         'collection.views.edit_thing',
         name='edit_thing'
+    ),
+    url(
+        r'^things/$',
+        RedirectView.as_view(pattern_name='browse')
     ),
 ]
